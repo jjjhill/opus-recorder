@@ -246,7 +246,7 @@ Recorder.prototype.stop = function(){
       encoder.addEventListener( "message", callback );
       encoder.postMessage({ command: "done" });
       if ( !this.config.reuseWorker ) {
-        encoder.postMessage({ command: "close" });
+        // encoder.postMessage({ command: "close" });
       }
     });
   }

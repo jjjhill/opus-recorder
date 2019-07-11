@@ -1,3 +1,4 @@
+
 # Opus & Wave Recorder
 
 A javascript library to encode the output of Web Audio API nodes in Ogg Opus or WAV format using WebAssembly.
@@ -36,7 +37,8 @@ Creates a recorder instance.
 - **bufferLength**                - (*optional*) The length of the buffer that the internal JavaScriptNode uses to capture the audio. Can be tweaked if experiencing performance issues. Defaults to `4096`.
 - **encoderPath**                 - (*optional*) Path to `encoderWorker.min.js` or `waveWorker.min.js` worker script. Defaults to `encoderWorker.min.js`
 - **mediaTrackConstraints**       - (*optional*) Object to specify [media track constraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints). Defaults to `true`.
-- **monitorGain**                 - (*optional*) Sets the gain of the monitoring output. Gain is an a-weighted value between `0` and `1`. Defaults to `0`
+- **monitorGain**                 - (*optional*) Sets the gain of the monitoring outpu}
+t. Gain is an a-weighted value between `0` and `1`. Defaults to `0`
 - **numberOfChannels**            - (*optional*) The number of channels to record. `1` = mono, `2` = stereo. Defaults to `1`. Maximum `2` channels are supported.
 - **recordingGain**               - (*optional*) Sets the gain of the recording input. Gain is an a-weighted value between `0` and `1`. Defaults to `1`
 
@@ -236,4 +238,3 @@ Clean the dist folder and git submodules:
 ```bash
 make clean
 ```
-

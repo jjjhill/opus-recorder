@@ -99,7 +99,9 @@ WavePCM.prototype.record = function( buffers ){
     }
   }
 
-  this.recordedBuffers.push( reducedData );
+  let copiedData = reducedData.map(x=>x);
+  this.recordedBuffers.push( copiedData );
+  global['postMessage']( {message: 'page', page: reducedData}, [reducedData.buffer] );
 };
 
 WavePCM.prototype.requestData = function(){
