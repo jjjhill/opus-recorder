@@ -13,7 +13,7 @@ global['onmessage'] = function( e ){
 
     case 'done':
       if (recorder) {
-        recorder.requestData();
+        // recorder.requestData();
         recorder = null;
       }
       break;
@@ -99,38 +99,44 @@ WavePCM.prototype.record = function( buffers ){
     }
   }
 
-  let copiedData = reducedData.map(x=>x);
-  this.recordedBuffers.push( copiedData );
+  // to output entire file at the end of recording:
+  // let copiedData = reducedData.map(x=>x);
+  // this.recordedBuffers.push( copiedData );
+  
+  this.recordedBuffers.push( reducedData );
+
   global['postMessage']( {message: 'page', page: reducedData}, [reducedData.buffer] );
 };
 
-WavePCM.prototype.requestData = function(){
-  var bufferLength = this.recordedBuffers[0].length;
-  var dataLength = this.recordedBuffers.length * bufferLength;
-  var headerLength = 44;
-  var wav = new Uint8Array( headerLength + dataLength );
-  var view = new DataView( wav.buffer );
+// WavePCM.prototype.requestData = function(){
+//   var bufferLength = this.recordedBuffers[0].length;
+//   var dataLength = this.recordedBuffers.length * bufferLength;
+//   var headerLength = 44;
+//   var wav = new Uint8Array( headerLength + dataLength );
+//   var view = new DataView( wav.buffer );
 
-  view.setUint32( 0, 1380533830, false ); // RIFF identifier 'RIFF'
-  view.setUint32( 4, 36 + dataLength, true ); // file length minus RIFF identifier length and file description length
-  view.setUint32( 8, 1463899717, false ); // RIFF type 'WAVE'
-  view.setUint32( 12, 1718449184, false ); // format chunk identifier 'fmt '
-  view.setUint32( 16, 16, true ); // format chunk length
-  view.setUint16( 20, 1, true ); // sample format (raw)
-  view.setUint16( 22, this.numberOfChannels, true ); // channel count
-  view.setUint32( 24, this.sampleRate, true ); // sample rate
-  view.setUint32( 28, this.sampleRate * this.bytesPerSample * this.numberOfChannels, true ); // byte rate (sample rate * block align)
-  view.setUint16( 32, this.bytesPerSample * this.numberOfChannels, true ); // block align (channel count * bytes per sample)
-  view.setUint16( 34, this.bitDepth, true ); // bits per sample
-  view.setUint32( 36, 1684108385, false); // data chunk identifier 'data'
-  view.setUint32( 40, dataLength, true ); // data chunk length
+//   view.setUint32( 0, 1380533830, false ); // RIFF identifier 'RIFF'
+//   view.setUint32( 4, 36 + dataLength, true ); // file length minus RIFF identifier length and file description length
+//   view.setUint32( 8, 1463899717, false ); // RIFF type 'WAVE'
+//   view.setUint32( 12, 1718449184, false ); // format chunk identifier 'fmt '
+//   view.setUint32( 16, 16, true ); // format chunk length
+//   view.setUint16( 20, 1, true ); // sample format (raw)
+//   view.setUint16( 22, this.numberOfChannels, true ); // channel count
+//   view.setUint32( 24, this.sampleRate, true ); // sample rate
+//   view.setUint32( 28, this.sampleRate * this.bytesPerSample * this.numberOfChannels, true ); // byte rate (sample rate * block align)
+//   view.setUint16( 32, this.bytesPerSample * this.numberOfChannels, true ); // block align (channel count * bytes per sample)
+//   view.setUint16( 34, this.bitDepth, true ); // bits per sample
+//   view.setUint32( 36, 1684108385, false); // data chunk identifier 'data'
+//   view.setUint32( 40, dataLength, true ); // data chunk length
 
-  for (var i = 0; i < this.recordedBuffers.length; i++ ) {
-    wav.set( this.recordedBuffers[i], i * bufferLength + headerLength );
-  }
+//   for (var i = 0; i < this.recordedBuffers.length; i++ ) {
+//     wav.set( this.recordedBuffers[i], i * bufferLength + headerLength );
+//   }
 
-  global['postMessage']( {message: 'page', page: wav}, [wav.buffer] );
-  global['postMessage']( {message: 'done'} );
-};
+//   // to output entire file at the end of recording
+//   // global['postMessage']( {message: 'page', page: wav}, [wav.buffer] );
+
+//   global['postMessage']( {message: 'done'} );
+// };
 
 module.exports = WavePCM
